@@ -72,6 +72,7 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext ts",
+    "test": "vitest",
     "package": "vsce package"
   },
   "devDependencies": {
