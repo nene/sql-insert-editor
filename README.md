@@ -4,9 +4,9 @@ Editing INSERT statements is a nuisance. This VSCode extension is here to help.
 
 ## Features
 
-- **Delete column** — Right-click on a column name in INSERT statement to remove that column.
+- **Delete column** — Right-click on a column name or value in INSERT statement to remove that column.
 
-Access via right-click context menu: **SQL insert editor > Delete column**
+![Delete column demo](delete-column.gif)
 
 ## Configuration
 
