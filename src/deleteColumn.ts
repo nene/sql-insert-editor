@@ -33,38 +33,46 @@ export function deleteColumn(
     throw new Error("Failed to identify INSERT statement column");
   }
 
+  const newInsertClause = {
+    ...insert,
+    columns: {
+      ...insert.columns,
+      expr: {
+        ...insert.columns.expr,
+        items: removeAt(columnIndex, insert.columns.expr.items),
+      },
+    },
+  };
+  const newValuesClause = {
+    ...values,
+    values: {
+      ...values.values,
+      items: values.values.items.map((row) => {
+        if (row.type !== "paren_expr") {
+          throw new Error("Not a standard INSERT statement");
+        }
+        return {
+          ...row,
+          expr: {
+            ...row.expr,
+            items: removeAt(columnIndex, row.expr.items),
+          },
+        };
+      }),
+    },
+  };
+
   const newInsertStmt = {
     ...stmt,
-    clauses: [
-      {
-        ...insert,
-        columns: {
-          ...insert.columns,
-          expr: {
-            ...insert.columns.expr,
-            items: removeAt(columnIndex, insert.columns.expr.items),
-          },
-        },
-      },
-      {
-        ...values,
-        values: {
-          ...values.values,
-          items: values.values.items.map((row) => {
-            if (row.type !== "paren_expr") {
-              throw new Error("Not a standard INSERT statement");
-            }
-            return {
-              ...row,
-              expr: {
-                ...row.expr,
-                items: removeAt(columnIndex, row.expr.items),
-              },
-            };
-          }),
-        },
-      },
-    ],
+    clauses: stmt.clauses.map((cls) => {
+      if (cls === insert) {
+        return newInsertClause;
+      } else if (cls === values) {
+        return newValuesClause;
+      } else {
+        return cls;
+      }
+    }),
   };
 
   program.statements[stmtIndex] = newInsertStmt;

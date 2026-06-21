@@ -23,6 +23,26 @@ describe("deleteColumn()", () => {
     `);
   });
 
+  it("deletes a column from INSERT statement with RETURNING clause", () => {
+    const result = deleteColumnAtCursor(dedent`
+      INSERT INTO tbl (foo, b|ar, baz) VALUES (1, 2, 3) RETURNING *;
+    `);
+    expect(result).toBe(dedent`
+      INSERT INTO tbl (foo, baz) VALUES (1, 3) RETURNING *;
+    `);
+  });
+
+  it("deletes a column from INSERT statement with WITH clause", () => {
+    const result = deleteColumnAtCursor(dedent`
+      WITH src AS (SELECT 1)
+      INSERT INTO tbl (foo, b|ar, baz) VALUES (1, 2, 3);
+    `);
+    expect(result).toBe(dedent`
+      WITH src AS (SELECT 1)
+      INSERT INTO tbl (foo, baz) VALUES (1, 3);
+    `);
+  });
+
   it("throws error when invalid SQL", () => {
     expect(() =>
       deleteColumnAtCursor(dedent`
