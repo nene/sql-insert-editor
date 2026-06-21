@@ -3,9 +3,27 @@ import { deleteColumn } from "./deleteColumn";
 import dedent from "dedent";
 
 describe("deleteColumn()", () => {
-  it("deletes a column from a basic INSERT statement", () => {
+  it("deletes a column from INSERT statement (cursor inside column name)", () => {
     const result = deleteColumnAtCursor(dedent`
       INSERT INTO tbl (foo, b|ar, baz) VALUES (1, 2, 3);
+    `);
+    expect(result).toBe(dedent`
+      INSERT INTO tbl (foo, baz) VALUES (1, 3);
+    `);
+  });
+
+  it("deletes a column from INSERT statement (cursor before column name)", () => {
+    const result = deleteColumnAtCursor(dedent`
+      INSERT INTO tbl (foo, |bar, baz) VALUES (1, 2, 3);
+    `);
+    expect(result).toBe(dedent`
+      INSERT INTO tbl (foo, baz) VALUES (1, 3);
+    `);
+  });
+
+  it("deletes a column from INSERT statement (cursor before column name)", () => {
+    const result = deleteColumnAtCursor(dedent`
+      INSERT INTO tbl (foo, bar|, baz) VALUES (1, 2, 3);
     `);
     expect(result).toBe(dedent`
       INSERT INTO tbl (foo, baz) VALUES (1, 3);
