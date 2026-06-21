@@ -52,13 +52,16 @@
       ],
       "sql-insert-editor.submenu": [
         {
-          "command": "sql-insert-editor.deleteColumn"
+          "command": "sql-insert-editor.moveColumnBefore",
+          "group": "1_move@1"
         },
         {
-          "command": "sql-insert-editor.moveColumnBefore"
+          "command": "sql-insert-editor.moveColumnAfter",
+          "group": "1_move@2"
         },
         {
-          "command": "sql-insert-editor.moveColumnAfter"
+          "command": "sql-insert-editor.deleteColumn",
+          "group": "2_delete"
         }
       ]
     },
