@@ -42,6 +42,24 @@
           "command": "sql-insert-editor.deleteColumn"
         }
       ]
+    },
+    "configuration": {
+      "title": "SQL Insert Editor",
+      "properties": {
+        "sqlInsertEditor.dialect": {
+          "type": "string",
+          "default": "sqlite",
+          "enum": ["sqlite", "mysql", "mariadb", "postgresql", "bigquery"],
+          "enumDescriptions": [
+            "SQLite",
+            "MySQL",
+            "MariaDB",
+            "PostgreSQL",
+            "BigQuery"
+          ],
+          "description": "SQL dialect to use when parsing."
+        }
+      }
     }
   },
   "scripts": {

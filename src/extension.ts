@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { deleteColumn } from "./deleteColumn";
+import { DialectName } from "sql-parser-cst";
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
@@ -11,7 +12,8 @@ export function activate(context: vscode.ExtensionContext) {
       const text = getEditorText(editor);
       const offset = getCursorOffset(editor);
       try {
-        replaceEditorText(editor, deleteColumn(text, offset));
+        const dialect = getDialect();
+        replaceEditorText(editor, deleteColumn(text, offset, dialect));
       } catch (error) {
         vscode.window.showInformationMessage(extractErrorMessage(error));
       }
@@ -25,6 +27,12 @@ function extractErrorMessage(error: unknown): string {
     return error.message;
   }
   return String(error);
+}
+
+function getDialect(): DialectName {
+  return vscode.workspace
+    .getConfiguration("sqlInsertEditor")
+    .get<DialectName>("dialect", "sqlite");
 }
 
 function getEditorText(editor: vscode.TextEditor): string {

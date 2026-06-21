@@ -1,8 +1,12 @@
-import { Node, parse, show } from "sql-parser-cst";
+import { DialectName, Node, parse, show } from "sql-parser-cst";
 
-export function deleteColumn(sql: string, location: number): string {
+export function deleteColumn(
+  sql: string,
+  location: number,
+  dialect: DialectName,
+): string {
   const program = parse(sql, {
-    dialect: "postgresql",
+    dialect,
     includeRange: true,
     includeComments: true,
     includeNewlines: true,
