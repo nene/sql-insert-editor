@@ -7,12 +7,34 @@ export function activate(context: vscode.ExtensionContext) {
       if (!editor) {
         return;
       }
-      const position = editor.selection.active;
-      editor.edit((editBuilder) => {
-        editBuilder.insert(position, "|");
-      });
+      const text = getEditorText(editor);
+      const offset = getCursorOffset(editor);
+      const newText = text.slice(0, offset) + "|" + text.slice(offset);
+      replaceEditorText(editor, newText);
     }),
   );
+}
+
+function getEditorText(editor: vscode.TextEditor): string {
+  return editor.document.getText();
+}
+
+function getCursorOffset(editor: vscode.TextEditor): number {
+  return editor.document.offsetAt(editor.selection.active);
+}
+
+function replaceEditorText(
+  editor: vscode.TextEditor,
+  newText: string,
+): Thenable<boolean> {
+  const document = editor.document;
+  const fullRange = new vscode.Range(
+    document.positionAt(0),
+    document.positionAt(document.getText().length),
+  );
+  return editor.edit((editBuilder) => {
+    editBuilder.replace(fullRange, newText);
+  });
 }
 
 export function deactivate() {}
