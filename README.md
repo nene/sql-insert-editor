@@ -18,3 +18,8 @@ Make sure to configure your SQL dialect. The extension only works with these sel
   - `postgresql` (partial support, but pretty good),
   - `mysql` (poorly supported),
   - `mariadb` (poorly supported).
+
+## Publishing
+
+After running `npm run package` you'll get a new `*.vsix` file generated.
+Upload that file to VSCode repository at: https://marketplace.visualstudio.com/manage/publishers/renesaarsoo
