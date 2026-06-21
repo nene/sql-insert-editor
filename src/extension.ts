@@ -5,55 +5,48 @@ import { DialectName } from "sql-parser-cst";
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
-    vscode.commands.registerCommand("sql-insert-editor.deleteColumn", () => {
-      const editor = vscode.window.activeTextEditor;
-      if (!editor) {
-        return;
-      }
-      const text = getEditorText(editor);
-      const offset = getCursorOffset(editor);
-      try {
-        const dialect = getDialect();
-        replaceEditorText(editor, deleteColumn(text, offset, dialect));
-      } catch (error) {
-        vscode.window.showInformationMessage(extractErrorMessage(error));
-      }
-    }),
+    vscode.commands.registerCommand(
+      "sql-insert-editor.deleteColumn",
+      sqlTransformCommand(deleteColumn),
+    ),
     vscode.commands.registerCommand(
       "sql-insert-editor.moveColumnBefore",
-      () => {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-          return;
-        }
-        const text = getEditorText(editor);
-        const offset = getCursorOffset(editor);
-        try {
-          const dialect = getDialect();
-          replaceEditorText(editor, moveColumn(text, offset, -1, dialect));
-        } catch (error) {
-          vscode.window.showInformationMessage(extractErrorMessage(error));
-        }
-      },
+      sqlTransformCommand((text, offset, dialect) =>
+        moveColumn(text, offset, -1, dialect),
+      ),
     ),
     vscode.commands.registerCommand(
       "sql-insert-editor.moveColumnAfter",
-      () => {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-          return;
-        }
-        const text = getEditorText(editor);
-        const offset = getCursorOffset(editor);
-        try {
-          const dialect = getDialect();
-          replaceEditorText(editor, moveColumn(text, offset, 1, dialect));
-        } catch (error) {
-          vscode.window.showInformationMessage(extractErrorMessage(error));
-        }
-      },
+      sqlTransformCommand((text, offset, dialect) =>
+        moveColumn(text, offset, 1, dialect),
+      ),
     ),
   );
+}
+
+type SqlTransform = (
+  text: string,
+  offset: number,
+  dialect: DialectName,
+) => string;
+
+function sqlTransformCommand(transform: SqlTransform): () => void {
+  return () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+    try {
+      const result = transform(
+        getEditorText(editor),
+        getCursorOffset(editor),
+        getDialect(),
+      );
+      replaceEditorText(editor, result);
+    } catch (error) {
+      vscode.window.showInformationMessage(extractErrorMessage(error));
+    }
+  };
 }
 
 // type-safe extraction of error.message from standard Error
