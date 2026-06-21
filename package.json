@@ -20,15 +20,26 @@
     "commands": [
       {
         "command": "sql-insert-editor.deleteColumn",
-        "title": "Delete this column"
+        "title": "Delete column"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "sql-insert-editor.submenu",
+        "label": "SQL insert editor"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "command": "sql-insert-editor.deleteColumn",
+          "submenu": "sql-insert-editor.submenu",
           "when": "editorLangId == sql",
           "group": "1_modification"
+        }
+      ],
+      "sql-insert-editor.submenu": [
+        {
+          "command": "sql-insert-editor.deleteColumn"
         }
       ]
     }
