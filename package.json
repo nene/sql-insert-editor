@@ -6,6 +6,10 @@
   "publisher": "ReneSaarsoo",
   "author": "Rene Saarsoo <nene@triin.net>",
   "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nene/sql-insert-editor"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
