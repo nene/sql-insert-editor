@@ -1,9 +1,29 @@
 {
   "name": "sql-insert-editor",
-  "version": "0.0.0",
+  "displayName": "SQL Insert Editor",
+  "version": "0.0.1",
   "description": "Helps in editing SQL insert statements.",
-  "main": "./dist/extension.js",
-  "scripts": {},
+  "publisher": "ReneSaarsoo",
   "author": "Rene Saarsoo <nene@triin.net>",
-  "license": "GPL-3.0-or-later"
+  "license": "GPL-3.0-or-later",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "contributes": {},
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.5.0"
+  }
 }
