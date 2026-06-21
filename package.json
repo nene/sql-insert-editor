@@ -74,7 +74,8 @@
     }
   },
   "scripts": {
-    "compile": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "clean": "rm -rf dist",
+    "compile": "npm run clean && esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
     "watch": "npm run compile -- --watch",
     "lint": "eslint src --ext ts",
     "test": "vitest",
