@@ -1,9 +1,10 @@
 import { DialectName, parse, show } from "sql-parser-cst";
 import { findColumnIndex, findInsertStatement, locationInNode } from "./utils";
 
-export function deleteColumn(
+export function moveColumn(
   sql: string,
   location: number,
+  direction: -1 | 1,
   dialect: DialectName,
 ): string {
   const program = parse(sql, {
@@ -25,13 +26,18 @@ export function deleteColumn(
     throw new Error("Failed to identify INSERT statement column");
   }
 
+  const targetIndex = columnIndex + direction;
+  if (targetIndex < 0 || targetIndex >= insert.columns.expr.items.length) {
+    throw new Error("Cannot move column further in that direction");
+  }
+
   const newInsertClause = {
     ...insert,
     columns: {
       ...insert.columns,
       expr: {
         ...insert.columns.expr,
-        items: removeAt(columnIndex, insert.columns.expr.items),
+        items: swap(columnIndex, targetIndex, insert.columns.expr.items),
       },
     },
   };
@@ -46,7 +52,7 @@ export function deleteColumn(
               ...row,
               expr: {
                 ...row.expr,
-                items: removeAt(columnIndex, row.expr.items),
+                items: swap(columnIndex, targetIndex, row.expr.items),
               },
             };
           case "row_constructor":
@@ -56,7 +62,7 @@ export function deleteColumn(
                 ...row.row,
                 expr: {
                   ...row.row.expr,
-                  items: removeAt(columnIndex, row.row.expr.items),
+                  items: swap(columnIndex, targetIndex, row.row.expr.items),
                 },
               },
             };
@@ -83,6 +89,9 @@ export function deleteColumn(
   return show(program);
 }
 
-function removeAt<T>(index: number, arr: T[]): T[] {
-  return [...arr.slice(0, index), ...arr.slice(index + 1)];
+function swap<T>(i: number, j: number, arr: T[]): T[] {
+  const result = [...arr];
+  result[i] = arr[j];
+  result[j] = arr[i];
+  return result;
 }
