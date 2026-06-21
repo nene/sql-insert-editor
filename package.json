@@ -16,7 +16,23 @@
   "activationEvents": [
     "onLanguage:sql"
   ],
-  "contributes": {},
+  "contributes": {
+    "commands": [
+      {
+        "command": "sql-insert-editor.deleteColumn",
+        "title": "Delete this column"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "sql-insert-editor.deleteColumn",
+          "when": "editorLangId == sql",
+          "group": "1_modification"
+        }
+      ]
+    }
+  },
   "scripts": {
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
