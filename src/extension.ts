@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { deleteColumn } from "./deleteColumn";
+import { moveColumn } from "./moveColumn";
 import { DialectName } from "sql-parser-cst";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -18,6 +19,40 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showInformationMessage(extractErrorMessage(error));
       }
     }),
+    vscode.commands.registerCommand(
+      "sql-insert-editor.moveColumnBefore",
+      () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+          return;
+        }
+        const text = getEditorText(editor);
+        const offset = getCursorOffset(editor);
+        try {
+          const dialect = getDialect();
+          replaceEditorText(editor, moveColumn(text, offset, -1, dialect));
+        } catch (error) {
+          vscode.window.showInformationMessage(extractErrorMessage(error));
+        }
+      },
+    ),
+    vscode.commands.registerCommand(
+      "sql-insert-editor.moveColumnAfter",
+      () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+          return;
+        }
+        const text = getEditorText(editor);
+        const offset = getCursorOffset(editor);
+        try {
+          const dialect = getDialect();
+          replaceEditorText(editor, moveColumn(text, offset, 1, dialect));
+        } catch (error) {
+          vscode.window.showInformationMessage(extractErrorMessage(error));
+        }
+      },
+    ),
   );
 }
 

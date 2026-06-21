@@ -26,6 +26,14 @@
       {
         "command": "sql-insert-editor.deleteColumn",
         "title": "Delete column"
+      },
+      {
+        "command": "sql-insert-editor.moveColumnBefore",
+        "title": "Move column before"
+      },
+      {
+        "command": "sql-insert-editor.moveColumnAfter",
+        "title": "Move column after"
       }
     ],
     "submenus": [
@@ -45,6 +53,12 @@
       "sql-insert-editor.submenu": [
         {
           "command": "sql-insert-editor.deleteColumn"
+        },
+        {
+          "command": "sql-insert-editor.moveColumnBefore"
+        },
+        {
+          "command": "sql-insert-editor.moveColumnAfter"
         }
       ]
     },
