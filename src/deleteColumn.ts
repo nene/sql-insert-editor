@@ -48,16 +48,27 @@ export function deleteColumn(
     values: {
       ...values.values,
       items: values.values.items.map((row) => {
-        if (row.type !== "paren_expr") {
-          throw new Error("Not a standard INSERT statement");
+        switch (row.type) {
+          case "paren_expr":
+            return {
+              ...row,
+              expr: {
+                ...row.expr,
+                items: removeAt(columnIndex, row.expr.items),
+              },
+            };
+          case "row_constructor":
+            return {
+              ...row,
+              row: {
+                ...row.row,
+                expr: {
+                  ...row.row.expr,
+                  items: removeAt(columnIndex, row.row.expr.items),
+                },
+              },
+            };
         }
-        return {
-          ...row,
-          expr: {
-            ...row.expr,
-            items: removeAt(columnIndex, row.expr.items),
-          },
-        };
       }),
     },
   };

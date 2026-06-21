@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { deleteColumn } from "./deleteColumn";
 import dedent from "dedent";
+import { DialectName } from "sql-parser-cst";
 
 describe("deleteColumn()", () => {
   it("deletes a column from INSERT statement (cursor inside column name)", () => {
@@ -61,6 +62,20 @@ describe("deleteColumn()", () => {
     `);
   });
 
+  it("deletes a column from INSERT statement with ROW() constructor (MySQL)", () => {
+    const result = deleteColumnAtCursor(
+      dedent`
+        INSERT INTO tbl (foo, b|ar, baz)
+        VALUES ROW(1, 2, 3), ROW(4, 5, 6);
+      `,
+      "mysql",
+    );
+    expect(result).toBe(dedent`
+      INSERT INTO tbl (foo, baz)
+      VALUES ROW(1, 3), ROW(4, 6);
+    `);
+  });
+
   it("throws error when invalid SQL", () => {
     expect(() =>
       deleteColumnAtCursor(dedent`
@@ -118,11 +133,14 @@ describe("deleteColumn()", () => {
   });
 });
 
-function deleteColumnAtCursor(sql: string): string {
+function deleteColumnAtCursor(
+  sql: string,
+  dialect: DialectName = "sqlite",
+): string {
   const offset = sql.indexOf("|");
   if (offset === -1) {
     throw new Error("Test SQL must contain a | to mark cursor position");
   }
   const cleanSql = sql.slice(0, offset) + sql.slice(offset + 1);
-  return deleteColumn(cleanSql, offset, "sqlite");
+  return deleteColumn(cleanSql, offset, dialect);
 }
