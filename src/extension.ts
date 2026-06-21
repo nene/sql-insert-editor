@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { deleteColumn } from "./deleteColumn";
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
@@ -9,10 +10,21 @@ export function activate(context: vscode.ExtensionContext) {
       }
       const text = getEditorText(editor);
       const offset = getCursorOffset(editor);
-      const newText = text.slice(0, offset) + "|" + text.slice(offset);
-      replaceEditorText(editor, newText);
+      try {
+        replaceEditorText(editor, deleteColumn(text, offset));
+      } catch (error) {
+        vscode.window.showInformationMessage(extractErrorMessage(error));
+      }
     }),
   );
+}
+
+// type-safe extraction of error.message from standard Error
+function extractErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return String(error);
 }
 
 function getEditorText(editor: vscode.TextEditor): string {
