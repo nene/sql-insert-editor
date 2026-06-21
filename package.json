@@ -74,17 +74,18 @@
     }
   },
   "scripts": {
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "compile": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "watch": "npm run compile -- --watch",
     "lint": "eslint src --ext ts",
     "test": "vitest",
-    "package": "vsce package"
+    "package": "npm run compile && vsce package"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^3.9.2",
     "dedent": "^1.7.2",
+    "esbuild": "^0.28.1",
     "typescript": "^5.5.0",
     "vitest": "^4.1.9"
   },
