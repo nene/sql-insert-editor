@@ -31,6 +31,27 @@ describe("deleteColumn()", () => {
     `);
   });
 
+  it("deletes a column from INSERT statement (cursor inside column value)", () => {
+    const result = deleteColumnAtCursor(dedent`
+      INSERT INTO tbl (foo, bar, baz) VALUES (10, 20|0, 3000);
+    `);
+    expect(result).toBe(dedent`
+      INSERT INTO tbl (foo, baz) VALUES (10, 3000);
+    `);
+  });
+
+  it("deletes a column from INSERT statement (cursor inside ROW constructor value) (MySQL)", () => {
+    const result = deleteColumnAtCursor(
+      dedent`
+      INSERT INTO tbl (foo, bar, baz) VALUES ROW(10, 200, 3000), ROW(20, 400, 60|00);
+    `,
+      "mysql",
+    );
+    expect(result).toBe(dedent`
+      INSERT INTO tbl (foo, bar) VALUES ROW(10, 200), ROW(20, 400);
+    `);
+  });
+
   it("deletes a column from all rows of INSERT statement", () => {
     const result = deleteColumnAtCursor(dedent`
       INSERT INTO tbl (foo, b|ar, baz)

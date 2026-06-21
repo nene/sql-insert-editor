@@ -26,9 +26,7 @@ export function deleteColumn(
     throw new Error("INSERT statement must have columns list and VALUES list");
   }
 
-  const columnIndex = insert.columns.expr.items.findIndex((col) =>
-    locationInNode(location, col),
-  );
+  const columnIndex = findColumnIndex(location, insert, values);
   if (columnIndex === -1) {
     throw new Error("Failed to identify INSERT statement column");
   }
@@ -89,6 +87,28 @@ export function deleteColumn(
   program.statements[stmtIndex] = newInsertStmt;
 
   return show(program);
+}
+
+function findColumnIndex(location: number, insert: any, values: any): number {
+  const fromColumns = insert.columns.expr.items.findIndex((col: Node) =>
+    locationInNode(location, col),
+  );
+  if (fromColumns !== -1) {
+    return fromColumns;
+  }
+
+  for (const row of values.values.items) {
+    const items =
+      row.type === "row_constructor" ? row.row.expr.items : row.expr.items;
+    const fromValues = items.findIndex((val: Node) =>
+      locationInNode(location, val),
+    );
+    if (fromValues !== -1) {
+      return fromValues;
+    }
+  }
+
+  return -1;
 }
 
 function locationInNode(location: number, node: Node): boolean {
