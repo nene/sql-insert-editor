@@ -1,0 +1,9 @@
+{
+  "name": "sql-insert-editor",
+  "version": "0.0.0",
+  "description": "Helps in editing SQL insert statements.",
+  "main": "./dist/extension.js",
+  "scripts": {},
+  "author": "Rene Saarsoo <nene@triin.net>",
+  "license": "GPL-3.0-or-later"
+}
