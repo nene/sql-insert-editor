@@ -1,7 +1,7 @@
 {
   "name": "sql-insert-editor",
   "displayName": "SQL Insert Editor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Helps in editing SQL insert statements.",
   "publisher": "ReneSaarsoo",
   "author": "Rene Saarsoo <nene@triin.net>",
