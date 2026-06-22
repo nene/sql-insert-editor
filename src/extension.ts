@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { deleteColumn } from "./deleteColumn";
 import { moveColumn } from "./moveColumn";
+import { sortColumns } from "./sortColumns";
 import { DialectName } from "sql-parser-cst";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -20,6 +21,10 @@ export function activate(context: vscode.ExtensionContext) {
       sqlTransformCommand((text, offset, dialect) =>
         moveColumn(text, offset, 1, dialect),
       ),
+    ),
+    vscode.commands.registerCommand(
+      "sql-insert-editor.sortColumns",
+      sqlTransformCommand(sortColumns),
     ),
   );
 }

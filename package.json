@@ -34,6 +34,10 @@
       {
         "command": "sql-insert-editor.moveColumnAfter",
         "title": "Move column after"
+      },
+      {
+        "command": "sql-insert-editor.sortColumns",
+        "title": "Sort columns"
       }
     ],
     "submenus": [
@@ -58,6 +62,10 @@
         {
           "command": "sql-insert-editor.moveColumnAfter",
           "group": "1_move@2"
+        },
+        {
+          "command": "sql-insert-editor.sortColumns",
+          "group": "1_move@3"
         },
         {
           "command": "sql-insert-editor.deleteColumn",

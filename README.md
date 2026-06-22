@@ -10,6 +10,7 @@ Right-click on a column name or value in INSERT statement to:
 
 - **Move column before**
 - **Move column after**
+- **Sort columns**
 - **Delete column**
 
 It uses a proper [SQL parser](https://github.com/nene/sql-parser-cst)
