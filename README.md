@@ -1,4 +1,4 @@
-# SQL Insert Editor
+# SQL Insert Editor [![Test](https://github.com/nene/sql-insert-editor/actions/workflows/test.yml/badge.svg)](https://github.com/nene/sql-insert-editor/actions/workflows/test.yml)
 
 Editing INSERT statements is a nuisance. This VSCode extension is here to help.
 
