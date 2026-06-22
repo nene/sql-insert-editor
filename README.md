@@ -12,6 +12,10 @@ Right-click on a column name or value in INSERT statement to:
 - **Move column after**
 - **Delete column**
 
+It uses a proper [SQL parser](https://github.com/nene/sql-parser-cst)
+under the hood to understand and transform the SQL syntax. That's both an upside and a downside.
+The downside is that only some SQL dialects are supported.
+
 ## Configuration
 
 Make sure to configure your SQL dialect. The extension only works with these select dialects supported by the parser.
